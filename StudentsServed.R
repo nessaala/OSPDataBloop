@@ -123,16 +123,17 @@ m4PercentLA <- (sum(m4LA$numberofStudents) / sum(m4All$numberofStudents)) %>% fo
 # "Total Number of Students" <- c(sum(m1All$numberofStudents), sum(m2All$numberofStudents), sum(m3All$numberofStudents), sum(m4All$numberofStudents))
 # )
 
-
+p <- percent(c( m1PercentLA, m2PercentLA,m3PercentLA,m4PercentLA))
 allData <-cbind(c("Module 1: Everyone is an Observer", "Module 2: Clues from Comets",
                   "Module 3: The Search for Water", "Module 4: Exoplanets are Everywhere"),
-                percent(c( m1PercentLA, m2PercentLA,m3PercentLA,m4PercentLA)),
+                p,
                 c(sum(m1LA$numberofStudents), sum(m2LA$numberofStudents), sum(m3LA$numberofStudents), sum(m4LA$numberofStudents)),
                 c(sum(m1All$numberofStudents), sum(m2All$numberofStudents), sum(m3All$numberofStudents), sum(m4All$numberofStudents))) %>% 
                 as.data.frame
 
 colnames(allData) <- c("Module", "% of LA City Students", "Total Number of LA Students", "Total Number of Students")
-
+allData$`% of LA City Students` <- p
+write.csv(allData, "percentagesTable.csv" )
 
 #-------------------------------------------------------------------------------
 
@@ -141,5 +142,7 @@ lallSchools <- c(fm1Data$`School Name`,fm2Data$`School Name`,fm3Data$`School Nam
 lallDistricts <- c(fm1Data$`School District`,fm2Data$`School District`,fm3Data$`School District`,fm4Data$`School District`,wm1Data$`School District`,wm2Data$`School District`,wm3Data$`School District`,wm4Data$`School District`)
 allSchoolsDF <- data_frame(lallSchools,lallDistricts)
 b <- !(duplicated(allSchoolsDF$lallSchools))
-allSchoolsDF <- allSchoolsDF[b,]
+allSchoolsDF <- allSchoolsDF[b,] %>% as.data.frame
+
+write.csv(allSchoolsDF, "ListofSchools.csv")
 #-------------------------------------------------------------------------------

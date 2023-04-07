@@ -29,9 +29,10 @@ process <- function(ogData, moduleName){
 
 inLA <- function(districts, dat){
   
-  l <- lapply(dat$`School District`, grepl, districts, ignore.case = TRUE) %>% as.logical
+  l <- lapply(dat$`School District`, grepl, districts, ignore.case = TRUE, fixed = TRUE) %>% as.logical
   
   return(dat[l,])
+  #return(l)
   
 }
 
@@ -80,7 +81,7 @@ wm1percentFromLA <- (sum(wm1LA$numberofStudents)/ sum(wm1Data$numberofStudents))
 wm2Data <- range_read(wm2Link) #%>% removeallNA
 wm2Data <- process(wm2Data, "Clues from Comets")
 wm2LA <- inLA(districtList, wm2Data)
-wm2percentFromLA <- (sum(wm2LA$numberofStudents)/ sum(wm2Data$numberofStudents))*100
+wm2percentFromLA <- (sum(as.integer(wm2LA$numberofStudents))/ sum(as.integer(wm2Data$numberofStudents)))*100
 
 wm3Data <- range_read(wm3Link) #%>% removeallNA
 wm3Data <- process(wm3Data, "The Search for Water")
@@ -131,9 +132,9 @@ allData <-cbind(c("Module 1: Everyone is an Observer", "Module 2: Clues from Com
                 c(sum(m1All$numberofStudents), sum(m2All$numberofStudents), sum(m3All$numberofStudents), sum(m4All$numberofStudents))) %>% 
                 as.data.frame
 
-colnames(allData) <- c("Module", "% of LA City Students", "Total Number of LA Students", "Total Number of Students")
+colnames(allData) <- c("Module", "% of LA County Students", "Total Number of LA Students", "Total Number of Students")
 allData$`% of LA City Students` <- p
-write.csv(allData, "percentagesTable.csv" )
+write.csv(allData, "percentagesTable.csv", row.names = FALSE )
 
 #-------------------------------------------------------------------------------
 
